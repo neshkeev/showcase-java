@@ -7,24 +7,24 @@ import java.util.Collections;
 import java.util.List;
 
 import static org.hamcrest.MatcherAssert.assertThat;
-import static org.hamcrest.Matchers.*;
+import static org.hamcrest.Matchers.hasSize;
 
 public class DataRaceTest {
 
-    static final List<Integer> syncList = Collections.synchronizedList(new ArrayList<>());
+    private static final List<Integer> syncList = Collections.synchronizedList(new ArrayList<>());
 
     @Test
     public void test() throws InterruptedException {
-        Thread t = new Thread(() -> addIfAbsent(42), "Background");
+        Thread t = new Thread(DataRaceTest::addIfAbsent, "Background");
         t.start();
-        addIfAbsent(42);
+        addIfAbsent();
         t.join();
         assertThat(syncList, hasSize(1));
     }
 
-    private static void addIfAbsent(int x) {
-        if (!syncList.contains(x)) {
-            syncList.add(x);
+    private static void addIfAbsent() {
+        if (!syncList.contains(42)) {
+            syncList.add(42);
         }
     }
 }

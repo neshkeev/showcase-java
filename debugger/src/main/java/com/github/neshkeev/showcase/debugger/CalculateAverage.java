@@ -7,6 +7,6 @@ public class CalculateAverage {
         for (var s : input) {
             result += s;
         }
-        return result;
+        return result / input.length;
     }
 }
