@@ -7,6 +7,7 @@ public interface Printable {
         @Override
         public void print() {
             System.out.println("Text");
+            System.out.println("Text");
         }
     }
 

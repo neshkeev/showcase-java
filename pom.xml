@@ -17,6 +17,7 @@
 
     <modules>
         <module>debugger</module>
+        <module>solid</module>
     </modules>
 
     <dependencies>

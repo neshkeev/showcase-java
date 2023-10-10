@@ -25,8 +25,8 @@ public class PrintableTest {
 
     @Test
     public void testPrintableNumber() {
-        var number = new Wrapper(new Printable.Number(42));
-        print(number.getPrintable());
+        var wrapper = new Wrapper(new Printable.Number(42));
+        print(wrapper.getPrintable());
     }
 
     private void print(Printable printable) {
