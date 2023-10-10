@@ -11,19 +11,19 @@ public class GoodSumHandlerTest {
 
     @Test
     public void testBasicSum() {
-        GoodSumHandler goodSumHandler = new GoodSumHandler();
+        GoodSumHandler goodSumHandler = new GoodSumHandler.GoodSumPositivesHandler();
         int sum = goodSumHandler.sum(List.of(1, -1, 2, -2, 3, -3));
         assertThat(sum, CoreMatchers.is(6));
     }
 
     @Test
     public void testNegativeSum() {
-        GoodSumHandler goodSumHandler = new GoodNegativesSumHandler();
+        GoodSumHandler goodSumHandler = new GoodSumNegativesHandler();
         int sum = goodSumHandler.sum(List.of(1, -1, 2, -2, 3, -3));
         assertThat(sum, CoreMatchers.is(-6));
     }
 
-    private static final class GoodNegativesSumHandler extends GoodSumHandler {
+    private static final class GoodSumNegativesHandler extends GoodSumHandler {
         @Override
         protected boolean allow(Integer value) {
             return value < 0;
