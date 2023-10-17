@@ -1,6 +1,7 @@
 package com.github.neshkeev.showcase.solid.openclose;
 
 import java.util.List;
+import java.util.function.Consumer;
 import java.util.function.Predicate;
 
 public final class GoodSumHandlerFunctional {
@@ -17,5 +18,12 @@ public final class GoodSumHandlerFunctional {
         }
 
         return s;
+    }
+
+    void consumerProcessor(List<Integer> values, Consumer<Integer> processor) {
+        for (Integer value : values) {
+            processor.accept(value);
+        }
+
     }
 }
