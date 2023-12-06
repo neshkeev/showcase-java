@@ -24,6 +24,5 @@ public final class GoodSumHandlerFunctional {
         for (Integer value : values) {
             processor.accept(value);
         }
-
     }
 }
