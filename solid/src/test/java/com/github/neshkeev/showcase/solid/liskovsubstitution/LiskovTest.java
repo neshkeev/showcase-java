@@ -4,6 +4,7 @@ import org.junit.jupiter.api.Test;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.function.Consumer;
 import java.util.function.Function;
 
 @SuppressWarnings({"unused", "CommentedOutCode"})
@@ -46,35 +47,53 @@ class LiskovTest {
 
     @Test
     public void testContravariant() {
-        assign_task(this::taskForProgrammer, new Employee.Programmer());
-        assign_task(this::taskForProgrammer, new Employee.Backend());
-        assign_task(this::taskForProgrammer, new Employee.Frontend());
-//        assign_task(this::taskForProgrammer, new Employee.Accountant());
-//        assign_task(this::taskForProgrammer, new Employee());
+        askProgrammerToWorkOnTask(this::writeCode, new Employee.Programmer());
+        askProgrammerToWorkOnTask(this::writeCode, new Employee.Backend());
+        askProgrammerToWorkOnTask(this::writeCode, new Employee.Frontend());
 
-        assign_task(this::taskForAccountant, new Employee.Accountant());
-//        assign_task(this::taskForAccountant, new Employee());
-//        assign_task(this::taskForAccountant, new Employee.Programmer());
-//        assign_task(this::taskForAccountant, new Employee.Backend());
-//        assign_task(this::taskForAccountant, new Employee.Frontend());
+//        askProgrammerToWriteCode(this::writeCode, new Employee.Accountant());
+//        askProgrammerToWriteCode(this::writeCode, new Employee());
 
-        assign_task(this::taskForAll, new Employee());
-        assign_task(this::taskForAll, new Employee.Programmer());
-        assign_task(this::taskForAll, new Employee.Backend());
-        assign_task(this::taskForAll, new Employee.Frontend());
-        assign_task(this::taskForAll, new Employee.Accountant());
+        askProgrammerToWorkOnTask(this::waterPlants, new Employee.Programmer());
+        askProgrammerToWorkOnTask(this::waterPlants, new Employee.Backend());
+        askProgrammerToWorkOnTask(this::waterPlants, new Employee.Frontend());
+
+//        askProgrammerToWorkOnTask(this::waterPlants, new Employee.Accountant());
+//        askProgrammerToWorkOnTask(this::waterPlants, new Employee());
+    }
+
+    @Test
+    public void testGenerics() {
+        assignTask(this::taskForAccountant, new Employee.Accountant());
+//        assignTask(this::taskForAccountant, new Employee());
+//        assignTask(this::taskForAccountant, new Employee.Programmer());
+//        assignTask(this::taskForAccountant, new Employee.Backend());
+//        assignTask(this::taskForAccountant, new Employee.Frontend());
+
+        assignTask(this::taskForAll, new Employee());
+        assignTask(this::taskForAll, new Employee.Programmer());
+        assignTask(this::taskForAll, new Employee.Backend());
+        assignTask(this::taskForAll, new Employee.Frontend());
+        assignTask(this::taskForAll, new Employee.Accountant());
     }
 
     @Test
     public void testPECS() {
         List<Employee> employees = List.of(new Employee(), new Employee.Programmer(), new Employee.Backend(), new Employee.Frontend());
-        List<Employee> newList = new ArrayList<>();
-        copy(employees, newList);
+        List<Employee> newEmployees = new ArrayList<>();
+        copy(employees, newEmployees);
 
         List<Employee.Programmer> programmers = List.of(new Employee.Programmer(), new Employee.Backend(), new Employee.Frontend());
         List<Employee.Programmer> newProgrammers = new ArrayList<>();
+
+        copy(programmers, newProgrammers);
         copyPECS(programmers, newProgrammers);
-//        copy(employees, nl);
+
+        List<Employee.Frontend> frontends = List.of(new Employee.Frontend());
+        List<Employee.Frontend> newFrontends = new ArrayList<>();
+//        copy(frontends, newEmployees);
+        copyPECS(frontends, newEmployees);
+        copyPECS(frontends, newFrontends);
     }
 
     <T> void copy(List<T> from, List<T> to) {
@@ -95,20 +114,29 @@ class LiskovTest {
 
     void invariant(List<Employee.Programmer> team) {}
 
-    <T, U> U taskForAll(T employee) {
-        return null;
+    void writeCode(Employee.Programmer programmer) {
     }
 
-    <U> U taskForProgrammer(Employee.Programmer programmer) {
-        return null;
+    void waterPlants(Employee employee) {
+    }
+
+    void realizeMarkup(Employee.Frontend frontend) {
+    }
+
+    void askProgrammerToWorkOnTask(Consumer<Employee.Programmer> function, Employee.Programmer programmer) {
+        function.accept(programmer);
     }
 
     <U> U taskForAccountant(Employee.Accountant programmer) {
         return null;
     }
 
+    <T, U> U taskForAll(T employee) {
+        return null;
+    }
+
     @SuppressWarnings("UnusedReturnValue")
-    <T, U> U assign_task(Function<T, U> task, T employee) {
+    <T, U> U assignTask(Function<T, U> task, T employee) {
         return task.apply(employee);
     }
 }
