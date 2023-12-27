@@ -8,7 +8,7 @@ import java.util.function.Consumer;
 import java.util.function.Function;
 
 @SuppressWarnings({"unused", "CommentedOutCode"})
-class LiskovTest {
+public class LiskovTest {
 
     @Test
     public void test() {
@@ -20,10 +20,20 @@ class LiskovTest {
         accountant.paySalary(accountant);
     }
 
+    /*
+    A <- B
+    CONTAINER<A> x- CONTAINER<B>
+     */
     @SuppressWarnings("RedundantTypeArguments")
     @Test
     public void testInvariant() {
         invariant(List.<Employee.Programmer>of());
+        List<Employee.Frontend> frontends = new ArrayList<>();
+        List<Employee> employees = new ArrayList<>();
+//        employees = frontends; // указывают на одну область памяти List<Frontend>
+//        employees.add(new Employee.Backend());
+//        Employee.Frontend frontend = frontends.get(0);// ClassCastException
+//        frontend.realizeMarkup();
 //        invariant(List.<Employee.Backend>of());
 //        invariant(List.<Employee.Frontend>of());
 //        invariant(List.<Employee.Accountant>of());
@@ -37,23 +47,83 @@ class LiskovTest {
 //        invariantArray(new Employee.Accountant[0]);
     }
 
+    /*
+    A <- B
+    CONTAINER<A> <- CONTAINER<B>
+    List<A> <- List<B> // Read Only
+     */
     @Test
     public void testCovariant() {
         @SuppressWarnings("unused")
-        List<Employee.Programmer> programmers = List.of(new Employee.Backend(),
+        List<Employee.Programmer> programmers = new ArrayList<>(List.of(
+                new Employee.Backend(),
                 new Employee.Frontend(),
-                new Employee.Programmer());
+                new Employee.Programmer()
+        ));
+
+        programmers.add(new Employee.Frontend());
+        programmers.set(0, new Employee.Backend());
+
+        Employee.Programmer programmer = programmers.get(0);
+        programmer.completeTask();
+        //noinspection StatementWithEmptyBody
+        for (Employee.Programmer employee : programmers) {
+//            Employee.Frontend frontend = (Employee.Frontend) employee; // ClassCastException
+//            employee.completeTask();
+//            frontend.realizeMarkup();
+//            frontend.completeTask();
+        }
+
+        System.out.println(getSize(programmers));
+        getSize(List.of());
+        getSize(List.<Employee.Frontend>of());
+//        getSize(List.<ArrayList>of());
     }
 
+    <T extends Employee> int getSize(List<T> employees) {
+        if (!employees.isEmpty()) {
+            // List<Programmer> employees
+            // T == Programmer
+            T t = employees.get(0);
+        }
+//        employees.set(0, new Employee());
+//        employees.add(new Employee());
+        return employees.size();
+    }
+
+    /*
+    A <- B
+    CONTAINER<A> -> CONTAINER<B>
+     */
     @Test
     public void testContravariant() {
+        // writeCode : Programmer -> void
+        // askProgrammerToWorkOnTask: ((Programmer -> void), Programmer) -> void
         askProgrammerToWorkOnTask(this::writeCode, new Employee.Programmer());
         askProgrammerToWorkOnTask(this::writeCode, new Employee.Backend());
         askProgrammerToWorkOnTask(this::writeCode, new Employee.Frontend());
 
-//        askProgrammerToWriteCode(this::writeCode, new Employee.Accountant());
-//        askProgrammerToWriteCode(this::writeCode, new Employee());
+//        askProgrammerToWorkOnTask(this::writeCode, new Employee.Accountant());
+//        askProgrammerToWorkOnTask(this::writeCode, new Employee());
 
+        // writeCode : Programmer -> void
+        // waterPlants : Employee -> void
+        // askProgrammerToWorkOnTask: ((Programmer -> void), Programmer) -> void
+        // askProgrammerToWorkOnTask: ((Employee -> void), Programmer) -> void
+        /*
+        Employee <- Programmer
+        writeCode: (Programmer -> void) <- waterPlants: (Employee -> void)
+        Функции контравариантны по входящему параметру
+         */
+        /*
+        C <- A
+        g: A -> B
+        h: C -> B
+        f((A -> B), ...): (A -> B), ... -> T
+        ...
+        A a = ...
+        (A -> B): paramAB(a)
+         */
         askProgrammerToWorkOnTask(this::waterPlants, new Employee.Programmer());
         askProgrammerToWorkOnTask(this::waterPlants, new Employee.Backend());
         askProgrammerToWorkOnTask(this::waterPlants, new Employee.Frontend());
@@ -77,6 +147,9 @@ class LiskovTest {
         assignTask(this::taskForAll, new Employee.Accountant());
     }
 
+    /*
+    PECS - Producer Extends Consumer Supper
+     */
     @Test
     public void testPECS() {
         List<Employee> employees = List.of(new Employee(), new Employee.Programmer(), new Employee.Backend(), new Employee.Frontend());
@@ -123,11 +196,13 @@ class LiskovTest {
     void realizeMarkup(Employee.Frontend frontend) {
     }
 
-    void askProgrammerToWorkOnTask(Consumer<Employee.Programmer> function, Employee.Programmer programmer) {
-        function.accept(programmer);
+    // ((Programmer -> void), Programmer) -> void
+    void askProgrammerToWorkOnTask(Consumer<Employee.Programmer> task,
+                                   Employee.Programmer programmer) {
+        task.accept(programmer);
     }
 
-    <U> U taskForAccountant(Employee.Accountant programmer) {
+    <U> U taskForAccountant(Employee.Accountant accountant) {
         return null;
     }
 

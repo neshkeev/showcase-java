@@ -22,7 +22,7 @@ public class BadHandler {
             System.out.println("It's Employee");
         }
         else if (obj instanceof Number) {
-            System.out.println("It's Employee");
+            System.out.println("It's Number");
         }
         else {
             throw new IllegalArgumentException("Object '%s' not supported".formatted(obj.getClass()));
