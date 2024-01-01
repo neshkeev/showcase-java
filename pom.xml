@@ -18,6 +18,7 @@
     <modules>
         <module>debugger</module>
         <module>solid</module>
+        <module>threading</module>
     </modules>
 
     <dependencies>
