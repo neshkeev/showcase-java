@@ -7,15 +7,21 @@ public class SynchronizedStaticMutexHandler {
         this.counter = counter;
     }
 
-    public synchronized void inc() {
-        counter++;
+    public void inc() {
+        synchronized (SynchronizedStaticMutexHandler.class) {
+            counter++;
+        }
     }
 
-    public synchronized void dec() {
-        counter--;
+    public void dec() {
+        synchronized (SynchronizedStaticMutexHandler.class) {
+            counter--;
+        }
     }
 
-    public synchronized int getCounter() {
-        return counter;
+    public int getCounter() {
+        synchronized (SynchronizedStaticMutexHandler.class) {
+            return counter;
+        }
     }
 }
