@@ -19,6 +19,7 @@
         <module>debugger</module>
         <module>solid</module>
         <module>threading</module>
+        <module>spi</module>
     </modules>
 
     <dependencies>

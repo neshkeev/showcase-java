@@ -6,9 +6,12 @@
         <sourceOutputDir name="target/generated-sources/annotations" />
         <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
         <outputRelativeToContentRoot value="true" />
+        <module name="showcase-java-debugger" />
         <module name="showcase-java-solid" />
         <module name="showcase-java-threading" />
-        <module name="showcase-java-debugger" />
+        <module name="showcase-java-spi-impl" />
+        <module name="showcase-java-spi-api" />
+        <module name="showcase-java-spi-main" />
       </profile>
     </annotationProcessing>
   </component>

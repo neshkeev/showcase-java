@@ -1,0 +1,2 @@
+com.github.neshkeev.showcase.spi.impl.ConstantNameGenerator
+com.github.neshkeev.showcase.spi.impl.RandomNameGenerator
