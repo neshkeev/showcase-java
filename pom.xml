@@ -21,6 +21,7 @@
         <module>threading</module>
         <module>spi</module>
         <module>jmx</module>
+        <module>spring-plugins</module>
     </modules>
 
     <dependencies>
